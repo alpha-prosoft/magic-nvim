@@ -195,6 +195,30 @@ link_config() {
   info "Linked $script_dir -> $config_dir"
 }
 
+# --- Shell aliases (vi/vim -> nvim, EDITOR) ---
+
+configure_shell() {
+  local rc="$HOME/.bashrc"
+  local marker="# nvim-config-aliases"
+
+  if grep -qF "$marker" "$rc" 2>/dev/null; then
+    info "Shell aliases already configured in $rc"
+    return
+  fi
+
+  info "Adding vi/vim/EDITOR aliases to $rc"
+  cat >> "$rc" <<EOF
+
+$marker
+alias vim="nvim"
+alias vi="nvim"
+export EDITOR="nvim"
+export VISUAL="nvim"
+EOF
+
+  info "Shell aliases added — restart your shell or run: source $rc"
+}
+
 # --- Bootstrap plugins ---
 
 bootstrap_plugins() {
@@ -212,6 +236,7 @@ main() {
   install_neovim
   install_dependencies
   link_config
+  configure_shell
   bootstrap_plugins
 
   echo
