@@ -1,0 +1,21 @@
+# Neovim generated
+doc/tags
+spell/
+.luarc.json
+
+# Session / state
+.repro/
+debug/
+data/
+
+# Logs
+*.log
+
+# Test / scratch files
+tt.*
+foo.*
+.tests/
+
+# OS
+.DS_Store
+Thumbs.db
