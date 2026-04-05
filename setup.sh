@@ -134,7 +134,11 @@ link_config() {
 
 # ── Shell config ─────────────────────────────────────────────────────
 # Single source line in .bashrc tagged with a marker comment.
-# Re-runs replace it in-place via sed; first run appends.
+# Re-runs replace it in-place via sed.
+# First run inserts after the tools marker (so nvim PATH/aliases
+# override tools defaults), or appends if tools marker is absent.
+
+TOOLS_MARKER="# >>> tools >>>"
 
 configure_shell() {
   local init_file="$SCRIPT_DIR/shell-init.bash"
@@ -145,6 +149,9 @@ configure_shell() {
   if grep -qF "$MARKER" "$BASHRC"; then
     info "Replacing nvim-config line in $BASHRC"
     sed -i "s|.*${MARKER}.*|${SOURCE_LINE}|" "$BASHRC"
+  elif grep -qF "$TOOLS_MARKER" "$BASHRC"; then
+    info "Inserting nvim-config line after tools in $BASHRC"
+    sed -i "/${TOOLS_MARKER}/a ${SOURCE_LINE}" "$BASHRC"
   else
     info "Appending nvim-config line to $BASHRC"
     printf '\n%s\n' "$SOURCE_LINE" >> "$BASHRC"
